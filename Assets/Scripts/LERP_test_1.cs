@@ -6,7 +6,7 @@ public class LERP_test_1 : MonoBehaviour
 {
     public bool isMonster;
     public GameObject[] providers; 
-    public GameObject neutral;  
+    public GameObject[] neutral;  
 
 public Vector3 positionToMoveTo; 
 
@@ -17,6 +17,7 @@ void Start()
 
 IEnumerator LerpPosition(Vector3 targetPosition, float duration)
 {
+    yield return new WaitForSeconds(1);
     float time = 0; 
     Vector3 startPosition = transform.position; 
 
@@ -43,7 +44,8 @@ void ChangeForm ()
     else
     {
         isMonster = false;
-        NewModelPrefabToInstantiate = neutral;
+        int randomIndex = Random.Range(0, neutral.Length);
+        NewModelPrefabToInstantiate = neutral[randomIndex];
     }
     Vector3 newPosition = transform.position;
     newPosition.y = 0; 

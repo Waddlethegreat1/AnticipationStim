@@ -34,6 +34,12 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            Debug.Log("_RE" + Time.time);
+            Debug.Log("_Round ended by user");
+            SceneManager.LoadScene("MainMenu");
+        }
         ScoreKeeper = GameObject.FindGameObjectWithTag("scoreKeep");
         HealthKeeper = GameObject.FindGameObjectWithTag("healthKeep");
         if (!isScenePaused)
