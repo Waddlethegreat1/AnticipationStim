@@ -28,7 +28,6 @@ public class HighscoreTable : MonoBehaviour
     {
         counter++;
         index = scoreTracker.GetComponent<Score>().index;
-        entryTemplate.gameObject.SetActive(false);
 
         //highscoreEntryList = new List<HighscoreEntry>() {
         //    new HighscoreEntry{score = 250, name = "JOHN"},
@@ -49,7 +48,15 @@ public class HighscoreTable : MonoBehaviour
                 }
             }
         }
-        if(counter > 1)
+        for (int i = 0; i < highscores.highscoreEntryList.Count; i++)
+        {
+            if (highscores.highscoreEntryList[i].name == scoreTracker.GetComponent<Score>().name2)
+            {
+                index = i;
+            }
+        }
+        entryTemplate.gameObject.SetActive(false);
+        if (counter > 1)
         {
             foreach (Transform t in highscoreEntryTransformList)
             {
@@ -98,9 +105,6 @@ public class HighscoreTable : MonoBehaviour
             entryTransform.Find("nametext").GetComponent<Text>().fontStyle = FontStyle.Italic;
             entryTransform.Find("scoretext").GetComponent<Text>().fontStyle = FontStyle.Italic;
             entryTransform.Find("postext").GetComponent<Text>().fontStyle = FontStyle.Italic;
-            entryTransform.Find("nametext").GetComponent<Text>().color = Color.yellow;
-            entryTransform.Find("postext").GetComponent<Text>().color = Color.yellow;
-            entryTransform.Find("scoretext").GetComponent<Text>().color = Color.yellow;
         }
         if(rank == 1){
             entryTransform.Find("nametext").GetComponent<Text>().color = Color.red;
@@ -124,13 +128,20 @@ public class HighscoreTable : MonoBehaviour
     {
         string jsonString = PlayerPrefs.GetString("highscoreTable");
         Highscores highscores = JsonUtility.FromJson<Highscores>(jsonString);
+        for (int i = 0; i < highscores.highscoreEntryList.Count; i++)
+        {
+            if (highscores.highscoreEntryList[i].name == scoreTracker.GetComponent<Score>().name2)
+            {
+                index = i;
+            }
+        }
         HighscoreEntry highscoreEntry = highscores.highscoreEntryList[index];
         highscoreEntry.score = score;
         highscores.highscoreEntryList[index] = highscoreEntry;
-
         string json = JsonUtility.ToJson(highscores);
         PlayerPrefs.SetString("highscoreTable", json);
         PlayerPrefs.Save();
+        refresh();
     }
     public class Highscores {
         public List<HighscoreEntry> highscoreEntryList;

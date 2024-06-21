@@ -14,6 +14,8 @@ TagManager:
   - healthBar
   - healthKeep
   - name
+  - LERP_Priest
+  - particle
   layers:
   - Default
   - TransparentFX

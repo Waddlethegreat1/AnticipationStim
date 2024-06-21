@@ -30,7 +30,7 @@ public class SaveLogToTxt : MonoBehaviour
                 tw.Close();
             }
         }
-        else{
+        else if(logString.Substring(0,3) == "[R]"){
             using(TextWriter tw = new StreamWriter(fileName+"RoundLogs.txt", true)){
                 tw.WriteLine(logString + " " + System.DateTime.Now);
                 tw.Close();

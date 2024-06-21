@@ -18,12 +18,14 @@ public class Score : MonoBehaviour
     public int highScore;
     public Highscores highscores;
     public Text txt;
+    public String name2;
     public GameObject nameTracker;
     private List<Transform> highscoreEntryTransformList;
     private List<HighscoreEntry> highscoreEntryList;
     void Start()
     {
         nameTracker = GameObject.FindGameObjectWithTag("name");
+        name2 = nameTracker.GetComponent<trackName>().name;
         music1.SetActive(true);
         highScore = 0;
         points = 0;
@@ -53,6 +55,7 @@ public class Score : MonoBehaviour
         Scene currentScene = SceneManager.GetActiveScene();
         if (highscores == null)
         {
+            leaderboard.GetComponent<HighscoreTable>().refresh();
             bool ok = false;
             highscores = leaderboard.GetComponent<HighscoreTable>().highscores;
             //Debug.Log(highscores);
@@ -93,6 +96,14 @@ public class Score : MonoBehaviour
                     }
                 }
                 leaderboard.GetComponent<HighscoreTable>().UpdateHighscoreEntry(highScore, name);
+                leaderboard.GetComponent<HighscoreTable>().refresh();
+                for (int i = 0; i < highscores.highscoreEntryList.Count; i++)
+                {
+                    if (highscores.highscoreEntryList[i].name == nameTracker.GetComponent<trackName>().name)
+                    {
+                        index = i;
+                    }
+                }
                 leaderboard.GetComponent<HighscoreTable>().refresh();
             }
             txt.text = "Personal Highscore: " + highScore.ToString();

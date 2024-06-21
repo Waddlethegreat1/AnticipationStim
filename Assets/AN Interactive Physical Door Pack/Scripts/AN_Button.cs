@@ -27,6 +27,7 @@ public class AN_Button : MonoBehaviour
     [Tooltip("True for vertical movenment by valve (if xRotation is false)")]
     public bool yPosition = false;
     public float max = 90f, min = 0f, speed = 5f;
+    public GameObject gm;
     bool valveBool = true;
     float current, startYPosition;
     Quaternion startQuat, rampQuat;
@@ -48,7 +49,7 @@ public class AN_Button : MonoBehaviour
 
     void Update()
     {
-        if (!Locked)
+        if (!Locked && !gm.GetComponent<GameManager>().isScenePaused)
         {
             if (Input.GetKeyDown(KeyCode.E) && !isValve && DoorObject != null && DoorObject.Remote && NearView()) // 1.lever and 2.button
             {

@@ -6,7 +6,9 @@ public class LERP_test_1 : MonoBehaviour
 {
     public bool isMonster;
     public GameObject[] providers; 
-    public GameObject[] neutral;  
+    public GameObject[] neutral;
+    public GameObject priest;
+    public bool isPriest;
 
 public Vector3 positionToMoveTo; 
 
@@ -40,12 +42,20 @@ void ChangeForm ()
         isMonster = true;
         int randomIndex = Random.Range(0, providers.Length); 
         NewModelPrefabToInstantiate = providers[randomIndex];
+        isPriest = false;
+    }
+    else if(Random.value > 0.4f)
+    {
+            isMonster = false;
+            NewModelPrefabToInstantiate = priest;
+            isPriest = true;
     }
     else
     {
         isMonster = false;
         int randomIndex = Random.Range(0, neutral.Length);
         NewModelPrefabToInstantiate = neutral[randomIndex];
+        isPriest = false;
     }
     Vector3 newPosition = transform.position;
     newPosition.y = 0; 
