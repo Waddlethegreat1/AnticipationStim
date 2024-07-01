@@ -68,6 +68,12 @@ public class AN_Button : MonoBehaviour
                 {
                     if (valveBool)
                     {
+                        if(speed < 5.0f)
+                        {
+                            ValveSpeed += 0.25f;
+                            speed += 0.06f;
+                        }
+
                         if (!isOpened && CanOpen && current < max) current += speed * Time.deltaTime;
                         if (isOpened && CanClose && current > min) current -= speed * Time.deltaTime;
 
@@ -86,6 +92,11 @@ public class AN_Button : MonoBehaviour
                 }
                 else
                 {
+                    if(speed > 1.0f)
+                    {
+                        ValveSpeed -= 0.25f;
+                        speed -= 0.06f;
+                    }
                     if (!isOpened && current > min) current -= speed * Time.deltaTime;
                     if (isOpened && current < max) current += speed * Time.deltaTime;
                     valveBool = true;

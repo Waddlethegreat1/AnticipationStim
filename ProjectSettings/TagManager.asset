@@ -16,6 +16,8 @@ TagManager:
   - name
   - LERP_Priest
   - particle
+  - difficulty
+  - gm
   layers:
   - Default
   - TransparentFX

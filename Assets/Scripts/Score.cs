@@ -8,12 +8,14 @@ using System;
 using static HighscoreTable;
 public class Score : MonoBehaviour
 {
+    public int totalRounds = 0;
     public GameObject music1;
     public GameObject leaderboard;
     // Start is called before the first frame update
     public int points;
     public GameObject mainMenu;
     public Text txt2;
+    public Text rounds;
     public int index;
     public int highScore;
     public Highscores highscores;
@@ -24,6 +26,7 @@ public class Score : MonoBehaviour
     private List<HighscoreEntry> highscoreEntryList;
     void Start()
     {
+        totalRounds = 0;
         nameTracker = GameObject.FindGameObjectWithTag("name");
         name2 = nameTracker.GetComponent<trackName>().name;
         music1.SetActive(true);
@@ -80,6 +83,14 @@ public class Score : MonoBehaviour
         }
 
         if (currentScene.name == "MainMenu"){
+            rounds.text = "Rounds Finished: " + totalRounds;
+            for (int i = 0; i < highscores.highscoreEntryList.Count; i++)
+            {
+                if (highscores.highscoreEntryList[i].name == nameTracker.GetComponent<trackName>().name)
+                {
+                    index = i;
+                }
+            }
             mainMenu.SetActive(true);
             if(points != -1){
                 txt2.text = "Score: " + points.ToString();

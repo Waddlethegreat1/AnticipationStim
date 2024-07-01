@@ -9,6 +9,7 @@ public class LERP_test_1 : MonoBehaviour
     public GameObject[] neutral;
     public GameObject priest;
     public bool isPriest;
+    public GameObject gamemanage;
 
 public Vector3 positionToMoveTo; 
 
@@ -37,14 +38,15 @@ IEnumerator LerpPosition(Vector3 targetPosition, float duration)
 void ChangeForm ()
 {
     GameObject NewModelPrefabToInstantiate; 
-    if (Random.value < 0.3f)
+    GameManager gamem = gamemanage.GetComponent<GameManager>();
+    if (Random.value < gamem.monsterChance)
     {
         isMonster = true;
         int randomIndex = Random.Range(0, providers.Length); 
         NewModelPrefabToInstantiate = providers[randomIndex];
         isPriest = false;
     }
-    else if(Random.value > 0.4f)
+    else if(Random.value > (1.0f - gamem.priestChance))
     {
             isMonster = false;
             NewModelPrefabToInstantiate = priest;

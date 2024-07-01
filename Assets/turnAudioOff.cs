@@ -16,10 +16,7 @@ public class turnAudioOff : MonoBehaviour
         Scene currentScene = SceneManager.GetActiveScene();
         if (currentScene.name == "MainMenu" || currentScene.name == "NameScene")
         {
-            this.GetComponent<AudioListener>().enabled = true;
-        }
-        else
-        {
+            this.gameObject.SetActive(true);
             this.GetComponent<AudioListener>().enabled = true;
         }
     }

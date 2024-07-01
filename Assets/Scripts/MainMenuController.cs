@@ -39,10 +39,8 @@ public class MainMenuController : MonoBehaviour {
         MainMenuPanel3.SetActive(true);
         MainMenuPanel4.SetActive(true);
         MainMenuPanel5.SetActive(true);
-        anim = GetComponent<Animator>();
 
-        //new key
-        PlayerPrefs.SetInt("quickSaveSlot", quickSaveSlotID);
+        playClickSound();
     }
 
     #region Open Different panels

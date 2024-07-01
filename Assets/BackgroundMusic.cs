@@ -6,6 +6,10 @@ public class BackgroundMusic : MonoBehaviour
 {
     // Start is called before the first frame update    
     [SerializeField] private float delay = 1f;
+    private void Start()
+    {
+        AudioListener.volume = 1f;
+    }
     public void LoadNextLevel(string name){
         StartCoroutine(LevelLoad(name));
     }
