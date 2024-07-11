@@ -25,7 +25,7 @@ public class ButtonPressTracker : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E)) // checks if button is being pressed 
+        if (Input.GetKeyDown(KeyCode.DownArrow)) // checks if button is being pressed 
         {
             buttonPressed = true; 
             pressStartTime = Time.time - sceneStartTime; 
@@ -37,7 +37,7 @@ public class ButtonPressTracker : MonoBehaviour
             }
         }
         
-        if (Input.GetKeyUp(KeyCode.E))
+        if (Input.GetKeyUp(KeyCode.DownArrow))
         {
             buttonPressed = false; 
             pressDuration = Time.time - sceneStartTime - pressStartTime; 

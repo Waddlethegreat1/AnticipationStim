@@ -24,19 +24,26 @@ public class GameManager : MonoBehaviour
     public float FogDensity; //The density of the fog 0.1 on default;
     public GameObject[] candles;
     public float candleLightIntensity; //The intensity of the candles' lights. 2 is default.
-    private float deduction = 0;
+    public float deduction = 0;
     private bool gameOver;
     private GameObject HealthKeeper;
     public GameObject release;
     public GameObject partcle;
+    public bool isDoctor;
+    public int index = -1;
     public GameObject[] screams;
+    public GameObject heal;
+    public GameObject curse;
 
     void Start()
     {
-
+        index = -1;
+        deduction = 0;
+        isDoctor = false;
+        roundTracker = FindObjectOfType<RoundTracker>(); // finds the script in the area 
+        Debug.Log("_Round " + PlayerPrefs.GetInt("Round") + " Start");
         gameOver = false;
         points = 0;
-        roundTracker = FindObjectOfType<RoundTracker>(); // finds the script in the area 
         blackScreen.SetActive(false); // ensure that the black screen is initially disabled 
         Debug.Log("_RS" + Time.time);
         RenderSettings.fogDensity = FogDensity;
@@ -55,7 +62,7 @@ public class GameManager : MonoBehaviour
             candles[i].GetComponent<Light>().intensity = candleLightIntensity;
         }
         partcle = GameObject.FindGameObjectWithTag("particle");
-        if (partcle != null && !isScenePaused)
+        if (partcle != null && (deduction == 0 || deduction == 1))
         {
             partcle.GetComponent<ParticleSystemRenderer>().enabled = false;
         }
@@ -83,7 +90,12 @@ public class GameManager : MonoBehaviour
             }
             incoming = GameObject.FindGameObjectWithTag("LERP_Priest");
             AN_Button VALV = valve.GetComponent<AN_Button>();
-            if(isMonster && !VALV.isOpened){
+            GameObject incoming2 = GameObject.FindGameObjectWithTag("LERP_Doctor");
+            if (incoming2 != null)
+            {
+                isDoctor = true;
+            }
+            if (isMonster && !VALV.isOpened){
                 points = 100;
                 deduction = 0;
             }
@@ -94,18 +106,40 @@ public class GameManager : MonoBehaviour
             else if(!isMonster && VALV.isOpened && incoming != null)
             {
                 deduction = -1f;
-                points = 50;
+                if (isDoctor)
+                {
+                    points = 0;
+                }
+                else
+                {
+                    points = 50;
+                }
             }
             else{
-                points = 0;
-                deduction = 1f;
+                if (!isDoctor)
+                {
+                    points = 0;
+                    deduction = 1f;
+                }
+                else
+                {
+                    points = 100;
+                    deduction = 0;
+                }
             }
         }
         if (!isBlackScreen && timer >= roundDuration) // check if timer has exceeded round duration and black screen isn't activ 
         {
             isBlackScreen = true; // set the black screen flag
             PlayerStats ps = HealthKeeper.GetComponent<PlayerStats>();
-            ps.health -= deduction;
+            if (!isDoctor)
+            {
+                ps.health -= deduction;
+            }
+            else
+            {
+                ps.health += deduction;
+            }
             incoming = GameObject.FindGameObjectWithTag("LERP_2");
             AN_Button VALV = valve.GetComponent<AN_Button>();
             int isMonster;
@@ -130,13 +164,25 @@ public class GameManager : MonoBehaviour
             else{
                 isOp = 1;
             }
-            Debug.Log("[R] " + PlayerPrefs.GetInt("Round") + " " + isMonster + " " + isOp + " " + correctAnswer + " " + HealthKeeper.GetComponent<PlayerStats>().health + " " + this.GetComponent<ButtonPressTracker>().reactionTime);
+            if (isDoctor)
+            {
+                isMonster = 1;
+                if(correctAnswer == 1)
+                {
+                    correctAnswer = 0;
+                }
+                else
+                {
+                    correctAnswer = 1;
+                }
+            }
+            Debug.Log("[R] " + PlayerPrefs.GetInt("Round") + " " + isMonster + " " + index + " " + isOp + " " + correctAnswer + " " + HealthKeeper.GetComponent<PlayerStats>().health + " " + this.GetComponent<ButtonPressTracker>().reactionTime);
             if(HealthKeeper.GetComponent<PlayerStats>().health <= 0){
                 gameOver = true;
             }
-            else if(HealthKeeper.GetComponent<PlayerStats>().health > 3)
+            else if(HealthKeeper.GetComponent<PlayerStats>().health > HealthKeeper.GetComponent<PlayerStats>().MaxHealth)
             {
-                HealthKeeper.GetComponent<PlayerStats>().health = 3;
+                HealthKeeper.GetComponent<PlayerStats>().health = HealthKeeper.GetComponent<PlayerStats>().MaxHealth;
             }
             StartCoroutine(ShowBlackScreen()); // start coroutine to show the black screen 
         }
@@ -153,17 +199,36 @@ public class GameManager : MonoBehaviour
         ButtonPressTracker bpt = this.GetComponent<ButtonPressTracker>();
         Debug.Log("_RE" + Time.time);
         int correct = 0;
-        isScenePaused = true; // pauses the scene 
         //Debug.Log("Round: " + PlayerPrefs.GetInt("Round") + " " + bpt.keyTracker);
         if (deduction < 0)
         {
-            correct = 1;
-            incoming = GameObject.FindGameObjectWithTag("LERP_Priest");
-            partcle.GetComponent<ParticleSystemRenderer>().enabled = true;
-            partcle.GetComponent<ParticleSystem>().Clear();
-            Animator anim = incoming.GetComponent<Animator>();
-            anim.Play("Male Attack 1");
-            yield return new WaitForSeconds(2f);
+            if (!isDoctor)
+            {
+                correct = 1;
+                incoming = GameObject.FindGameObjectWithTag("LERP_Priest");
+                partcle.GetComponent<ParticleSystemRenderer>().enabled = true;
+                partcle.GetComponent<ParticleSystem>().Clear();
+                Animator anim = incoming.GetComponent<Animator>();
+                anim.Play("Male Attack 1");
+                yield return new WaitForSeconds(0.3f);
+                heal.GetComponent<AudioSource>().Play();
+                yield return new WaitForSeconds(1.7f);
+            }
+            else
+            { 
+                incoming = GameObject.FindGameObjectWithTag("LERP_Priest");
+                partcle.GetComponent<ParticleSystemRenderer>().enabled = true;
+                partcle.GetComponent<ParticleSystem>().Clear();
+                Animator anim = incoming.GetComponent<Animator>();
+
+                anim.Play("Male Attack 1");
+                yield return new WaitForSeconds(0.3f);
+                curse.GetComponent<AudioSource>().Play();
+                yield return new WaitForSeconds(1.7f);
+                correct = -1;
+                int randScream = (int)(Random.value * screams.Length);
+                screams[randScream].GetComponent<AudioSource>().Play();
+            }
         }
         else if(deduction == 0)
         {
@@ -186,13 +251,25 @@ public class GameManager : MonoBehaviour
             diffucultyController diffucultyController = dcontrol.GetComponent<diffucultyController>();
             diffucultyController.decreaseDifficulty(candleLightIntensity, FogDensity);
         }
+        isScenePaused = true; // pauses the scene 
+
         blackScreen.SetActive(true); // enable the black screen GameObject 
         release.SetActive(false);
         Score scorekeep = ScoreKeeper.GetComponent<Score>();
+        if(scorekeep.points < 1000 * scorekeep.thousand && scorekeep.points + points >= 1000 * scorekeep.thousand)
+        {
+            scorekeep.thousand+=scorekeep.thousand + 1;
+            HealthKeeper.GetComponent<PlayerStats>().AddHealth();
+        }
         scorekeep.points += points;
-        yield return new WaitForSeconds(blackScreenDuration); // wait for listed black screen duration 
+        float randomDur = ((Random.value * 3.0f) * 0.1f) + 0.01f;
+        if(Random.value < 0.5)
+        {
+            randomDur *= -1;
+        }
+        yield return new WaitForSeconds(blackScreenDuration + randomDur); // wait for listed black screen duration 
         //reset the scene
-        while(Input.GetKey(KeyCode.E))
+        while(Input.GetKey(KeyCode.DownArrow))
         {
             release.SetActive(true);
             yield return new WaitForSeconds(0.5f);

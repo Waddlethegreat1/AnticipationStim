@@ -793,6 +793,7 @@ GameObject:
   - component: {fileID: 423507581}
   - component: {fileID: 423507580}
   - component: {fileID: 423507582}
+  - component: {fileID: 423507583}
   m_Layer: 0
   m_Name: ScoreKeeperTracker
   m_TagString: scoreKeep
@@ -820,8 +821,10 @@ MonoBehaviour:
   txt2: {fileID: 620336730}
   rounds: {fileID: 528193048}
   index: 0
+  thousand: 0
   highScore: 0
   txt: {fileID: 1032422221}
+  HealthKeeper: {fileID: 721034830}
   name2: 
   nameTracker: {fileID: 0}
 --- !u!4 &423507581
@@ -851,7 +854,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a58cff5dfef2ef646b9e224fad85ad8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tm: 
   fileName: C:\Users\Bartoli\Research\Baylor\data\
+--- !u!114 &423507583
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 423507579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c57c48a088d05cd488da353afa8b819f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  indexes: 
+  trialsToBeCreated: 100
+  SK: {fileID: 423507579}
 --- !u!1 &469721710
 GameObject:
   m_ObjectHideFlags: 0
@@ -1806,7 +1825,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   den: 0.1
-  inten: 2
+  inten: 3
 --- !u!4 &596015514
 Transform:
   m_ObjectHideFlags: 0
@@ -4616,6 +4635,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5de6746f753d71640a3ec80042b8881d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  folderpath: C:/Users/Bartoli/Research/Baylor/data/Leaderboard/
 --- !u!1 &1780564067
 GameObject:
   m_ObjectHideFlags: 0

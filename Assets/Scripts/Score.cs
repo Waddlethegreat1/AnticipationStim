@@ -17,9 +17,11 @@ public class Score : MonoBehaviour
     public Text txt2;
     public Text rounds;
     public int index;
+    public int thousand;
     public int highScore;
     public Highscores highscores;
     public Text txt;
+    public GameObject HealthKeeper;
     public String name2;
     public GameObject nameTracker;
     private List<Transform> highscoreEntryTransformList;
@@ -32,6 +34,7 @@ public class Score : MonoBehaviour
         music1.SetActive(true);
         highScore = 0;
         points = 0;
+        thousand = 1;
     }
     // public void checkName(){
     //     // for(int i = 0; i < highscoreList.Count(); i++){
@@ -83,6 +86,9 @@ public class Score : MonoBehaviour
         }
 
         if (currentScene.name == "MainMenu"){
+            string jsonString = PlayerPrefs.GetString("highscoreTable");
+            HealthKeeper.GetComponent<PlayerStats>().RemoveHealth();
+            thousand = 1;
             rounds.text = "Rounds Finished: " + totalRounds;
             for (int i = 0; i < highscores.highscoreEntryList.Count; i++)
             {
@@ -96,7 +102,6 @@ public class Score : MonoBehaviour
                 txt2.text = "Score: " + points.ToString();
             }
             highScore = Mathf.Max(points, highScore);
-            string jsonString = PlayerPrefs.GetString("highscoreTable");
             if (highScore > highscores.highscoreEntryList[index].score)
             {
                 for (int i = 0; i < highscores.highscoreEntryList.Count; i++)

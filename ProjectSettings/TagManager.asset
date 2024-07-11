@@ -18,6 +18,8 @@ TagManager:
   - particle
   - difficulty
   - gm
+  - LERP_Doctor
+  - BRIGHT
   layers:
   - Default
   - TransparentFX

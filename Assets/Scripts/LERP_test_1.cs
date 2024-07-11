@@ -8,6 +8,7 @@ public class LERP_test_1 : MonoBehaviour
     public GameObject[] providers; 
     public GameObject[] neutral;
     public GameObject priest;
+    public GameObject SK;
     public bool isPriest;
     public GameObject gamemanage;
 
@@ -37,17 +38,23 @@ IEnumerator LerpPosition(Vector3 targetPosition, float duration)
 
 void ChangeForm ()
 {
-    GameObject NewModelPrefabToInstantiate; 
+    GameObject NewModelPrefabToInstantiate;
+    SK = GameObject.FindGameObjectWithTag("scoreKeep");
+    PreCreateTrials score = SK.GetComponent<PreCreateTrials>();
+    int round = SK.GetComponent<Score>().totalRounds + 1;
     GameManager gamem = gamemanage.GetComponent<GameManager>();
-    if (Random.value < gamem.monsterChance)
+    float val = Random.value;
+    if (score.indexes[round - 1] < 6)
     {
         isMonster = true;
-        int randomIndex = Random.Range(0, providers.Length); 
+        int randomIndex = score.indexes[round - 1];
+        gamem.index = randomIndex;
         NewModelPrefabToInstantiate = providers[randomIndex];
         isPriest = false;
     }
-    else if(Random.value > (1.0f - gamem.priestChance))
+    else if (score.indexes[round - 1] == 11)
     {
+            gamem.index = 5;
             isMonster = false;
             NewModelPrefabToInstantiate = priest;
             isPriest = true;
@@ -55,7 +62,8 @@ void ChangeForm ()
     else
     {
         isMonster = false;
-        int randomIndex = Random.Range(0, neutral.Length);
+        int randomIndex = score.indexes[round - 1] - 6;
+        gamem.index = randomIndex;
         NewModelPrefabToInstantiate = neutral[randomIndex];
         isPriest = false;
     }
