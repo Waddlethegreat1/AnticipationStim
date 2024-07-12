@@ -86,7 +86,7 @@ public class Score : MonoBehaviour
         }
 
         if (currentScene.name == "MainMenu"){
-            string jsonString = PlayerPrefs.GetString("highscoreTable");
+            leaderboard.GetComponent<HighscoreTable>().refresh();
             HealthKeeper.GetComponent<PlayerStats>().RemoveHealth();
             thousand = 1;
             rounds.text = "Rounds Finished: " + totalRounds;

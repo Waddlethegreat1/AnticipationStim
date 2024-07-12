@@ -89,6 +89,10 @@ public class PreCreateTrials : MonoBehaviour
                     }
                     index--;
                 }
+                if(i == 0)
+                {
+                    notwork = true;
+                }
                 if (notwork)
                 {
                     int tmp = indexes[i];

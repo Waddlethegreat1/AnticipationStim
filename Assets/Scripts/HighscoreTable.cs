@@ -27,14 +27,17 @@ public class HighscoreTable : MonoBehaviour
     public void refresh()
     {
         counter++;
+        string jsonString = PlayerPrefs.GetString("highscoreTable");
+        highscores = JsonUtility.FromJson<Highscores>(jsonString);
         index = scoreTracker.GetComponent<Score>().index;
 
         //highscoreEntryList = new List<HighscoreEntry>() {
-        //    new HighscoreEntry{score = 250, name = "JOHN"},
-        //    new HighscoreEntry{score = 100, name = "GEOF"},
+        //    new HighscoreEntry{score = 23850, name = "MIKE"},
+        //    new HighscoreEntry{score = 11950, name = "RYAN"},
+        //    new HighscoreEntry{score = 11850, name = "ELEO"},
+        //    new HighscoreEntry{score = 2100, name = "GEOF"},
+        //    new HighscoreEntry{score = 1200, name = "LAYT"},
         //};
-        string jsonString = PlayerPrefs.GetString("highscoreTable");
-        highscores = JsonUtility.FromJson<Highscores>(jsonString);
         //Debug.Log(highscores);
         for (int i = 0; i < highscores.highscoreEntryList.Count; i++)
         {

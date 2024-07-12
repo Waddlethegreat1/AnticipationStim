@@ -854,6 +854,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a58cff5dfef2ef646b9e224fad85ad8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  score: {fileID: 423507579}
   tm: 
   fileName: C:\Users\Bartoli\Research\Baylor\data\
 --- !u!114 &423507583

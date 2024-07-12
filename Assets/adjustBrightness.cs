@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 public class adjustBrightness : MonoBehaviour
 {
@@ -16,12 +17,13 @@ public class adjustBrightness : MonoBehaviour
         {
             candles[i].GetComponent<Light>().intensity = brightness;
         }
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        if (Input.GetKey(KeyCode.Keypad4) || Input.GetKey(KeyCode.LeftArrow))
         {
             increaseBright();
         }
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+        if (Input.GetKey(KeyCode.Keypad6) || Input.GetKey(KeyCode.RightArrow))
         {
+
             decreaseBright();
         }
     }
@@ -31,12 +33,24 @@ public class adjustBrightness : MonoBehaviour
     }
     public void increaseBright()
     {
-        fogDen -= 0.004f;
-        brightness += 0.12f;
+        if (fogDen > 0)
+        {
+            fogDen -= 0.001f;
+        }
+        if (brightness < 5)
+        {
+            brightness += 0.03f;
+        }
     }
     public void decreaseBright()
     {
-        fogDen += 0.004f;
-        brightness -= 0.12f;
+        if (fogDen < 0.5f)
+        {
+            fogDen += 0.001f;
+        }
+        if (brightness > 0.2)
+        {
+            brightness -= 0.03f;
+        }
     }
 }

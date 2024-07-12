@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
     private bool gameOver;
     private GameObject HealthKeeper;
     public GameObject release;
+    bool paused = false;
     public GameObject partcle;
     public bool isDoctor;
     public int index = -1;
@@ -37,6 +38,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        paused = false;
         index = -1;
         deduction = 0;
         isDoctor = false;
@@ -56,6 +58,9 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.P)){
+            paused = !paused;
+        }
         RenderSettings.fogDensity = FogDensity;
         for (int i = 0; i < candles.Length; i++)
         {
@@ -269,7 +274,7 @@ public class GameManager : MonoBehaviour
         }
         yield return new WaitForSeconds(blackScreenDuration + randomDur); // wait for listed black screen duration 
         //reset the scene
-        while(Input.GetKey(KeyCode.DownArrow))
+        while(Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.Keypad2) || paused)
         {
             release.SetActive(true);
             yield return new WaitForSeconds(0.5f);

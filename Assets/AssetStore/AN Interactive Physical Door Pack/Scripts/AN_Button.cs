@@ -31,7 +31,8 @@ public class AN_Button : MonoBehaviour
     bool valveBool = true;
     float current, startYPosition;
     Quaternion startQuat, rampQuat;
-
+    public GameObject closeSound;
+    bool closed = false;
     Animator anim;
 
     // NearView()
@@ -41,6 +42,7 @@ public class AN_Button : MonoBehaviour
 
     void Start()
     {
+        closed = false;
         anim = GetComponent<Animator>();
         startYPosition = RampObject.position.y;
         startQuat = transform.rotation;
@@ -49,9 +51,15 @@ public class AN_Button : MonoBehaviour
 
     void Update()
     {
+
+        if(!closed && !isOpened)
+        {
+            closed = true;
+            closeSound.GetComponent<AudioSource>().Play();
+        }
         if (!Locked && !gm.GetComponent<GameManager>().isScenePaused)
         {
-            if (Input.GetKeyDown(KeyCode.DownArrow) && !isValve && DoorObject != null && DoorObject.Remote && NearView()) // 1.lever and 2.button
+            if ((Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.Keypad2)) && !isValve && DoorObject != null && DoorObject.Remote && NearView()) // 1.lever and 2.button
             {
                 DoorObject.Action(); // void in door script to open/close
                 if (isLever) // animations
@@ -64,7 +72,7 @@ public class AN_Button : MonoBehaviour
             else if (isValve && RampObject != null) // 3.valve
             {
                 // changing value in script
-                if (Input.GetKey(KeyCode.DownArrow) && NearView() && gm.GetComponent<GameManager>().deduction >= 0)
+                if ((Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.Keypad2)) && NearView() && gm.GetComponent<GameManager>().deduction >= 0)
                 {
                     if (valveBool)
                     {
